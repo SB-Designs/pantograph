@@ -29,6 +29,8 @@ const SITE_CONFIG = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  if (!location.hash) window.scrollTo(0, 0);
   if (SITE_CONFIG.LOGO_URL) {
     ["logoImage", "footerLogoImage"].forEach(id => {
       const img = document.getElementById(id);
