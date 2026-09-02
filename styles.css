@@ -64,12 +64,15 @@ a { color: inherit; text-decoration: none; }
 
 .hero {
   position: relative;
-  min-height: 570px;
+  /* A full viewport hero: on a normal desktop viewport it owns the entire
+     visible screen below the header, so no section below peeks into view. */
+  min-height: calc(100svh - 100px);
+  height: calc(100svh - 100px);
   border-radius: 7px;
   overflow: hidden;
   display: grid;
   align-items: start;
-  padding-top: 34px;
+  padding-top: clamp(30px, 7vh, 72px);
   background: #48474a;
 }
 
@@ -139,24 +142,26 @@ a { color: inherit; text-decoration: none; }
 /* Connector rail: continuous, blurred glow + crisp core, always behind cards. */
 .timeline {
   position: relative;
-  padding-top: 18px;
+  padding-top: 34px;
   --rail-x: var(--rail);
 }
+
+/* Crisp core + broad blurred halo. The rail itself is always below cards. */
 .timeline::before {
   content: "";
   position: absolute;
   z-index: 0;
-  left: var(--rail-x);
+  left: calc(var(--rail-x) - 3px);
   top: 0;
   bottom: 0;
   width: 7px;
   border-radius: 999px;
   background: var(--green);
   box-shadow:
-    0 0 4px rgba(0,166,90,.95),
-    0 0 16px rgba(0,166,90,.55),
-    0 0 32px rgba(0,166,90,.18);
-  transform-origin: top;
+    0 0 5px rgba(0,166,90,.95),
+    0 0 14px rgba(0,166,90,.72),
+    0 0 30px rgba(0,166,90,.34);
+  pointer-events: none;
 }
 
 .timeline-section {
@@ -166,18 +171,38 @@ a { color: inherit; text-decoration: none; }
   padding-bottom: 48px;
 }
 
-/* This short glow visually joins the rail to each section heading. */
+/* Connector blob: a real horizontal pill crossing the vertical rail.
+   It is deliberately wider than the rail and blurred so it reads as a
+   glowing connector rather than another line. */
 .timeline-connector {
   position: absolute;
-  z-index: 1;
-  left: calc(var(--rail-x) - 1px);
-  top: 0;
-  height: 100px;
-  width: 9px;
-  background: linear-gradient(to bottom, rgba(0,166,90,0), rgba(0,166,90,.75), var(--green));
-  filter: blur(1.3px);
+  z-index: 2;
+  left: calc(var(--rail-x) - 3px);
+  top: 96px;
+  width: 58px;
+  height: 18px;
+  transform: translate(-50%, -50%);
   border-radius: 999px;
+  background: rgba(0,166,90,.78);
+  filter: blur(5px);
+  box-shadow:
+    0 0 12px rgba(0,166,90,.8),
+    0 0 24px rgba(0,166,90,.42);
   pointer-events: none;
+}
+
+/* Tiny crisp center gives the blurred blob a visible connection to the rail. */
+.timeline-connector::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 5px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: rgba(0,166,90,.95);
+  filter: blur(1px);
 }
 
 .timeline-node {
@@ -377,7 +402,8 @@ a { color: inherit; text-decoration: none; }
   .topbar { height: 78px; }
   .section-pad { margin-inline: 18px; }
   .hero {
-    min-height: 455px;
+    min-height: calc(100svh - 78px);
+    height: calc(100svh - 78px);
     padding-top: 22px;
   }
   .hero-card {
@@ -394,7 +420,13 @@ a { color: inherit; text-decoration: none; }
     padding-top: 70px;
     padding-bottom: 38px;
   }
-  .timeline-connector { width: 8px; height: 78px; }
+  .timeline-connector {
+    left: var(--rail-x);
+    top: 76px;
+    width: 48px;
+    height: 16px;
+  }
+  .timeline-connector::after { width: 28px; height: 4px; }
   .timeline-node {
     left: calc(var(--rail-x) - 10px);
     top: 63px;
