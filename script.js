@@ -4,7 +4,7 @@
 */
 const SITE_CONFIG = {
   LOGO_URL: "",
-  HERO_IMAGE_URL: "",
+  HERO_IMAGE_URL: "/image 27.png",
 
   PROJECTS: [
     { image: "", title: "Project One", description: "Short description of the project and what makes it interesting.", url: "#" },
